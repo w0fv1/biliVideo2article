@@ -14,6 +14,24 @@ from bilibili_api.login import (
 from config import config
 from bilibili_api.user import get_self_info
 
+
+def read_license():
+    with open("LICENSE", "r", encoding="utf-8") as f:
+        license_content = f.read()
+    print("\n===== LICENSE =====")
+    print(license_content)
+    print("===================\n")
+    with open("许可协议", "r", encoding="utf-8") as f:
+        license_content = f.read()
+    print("\n===== 许可协议 =====")
+    print(license_content)
+    print("===================\n")
+
+
+read_license()
+agree = input("你是否同意以上LICENSE文件中的条款? (y/n): ")
+if agree != "y":
+    exit(0)
 # 免责声明: 本代码仅供学习交流使用, 请勿用于商业用途, 请勿用于违法用途.
 
 agree = input(
@@ -129,7 +147,6 @@ https://www.bilibili.com/video/{bvid}
     with open("output.md", "w", encoding="utf-8") as f:
         f.write(articleContent)
 
-    
     # 将cover下载写入cover.jpg
     print("coverUrl", coverUrl)
     if coverUrl is None or coverUrl == "":
