@@ -121,6 +121,7 @@ async def generateArticle():
     print("coverUrl", coverUrl)
     print("=====================================")
 
+    print("开始生成文章, 请稍等...")
     # return
     articleContent = await answer(
         f"""
