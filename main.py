@@ -92,9 +92,9 @@ async def answer(question: str) -> str:
     ]
     chat_completion = await client.chat.completions.create(
         messages=messages,
-        model="deepseek-chat",
-        temperature=1,
-        max_tokens=4096,
+        model=config["openai"]["model"],
+        temperature=config["openai"]["temperature"],
+        max_tokens=config["openai"]["max_tokens"],
     )
 
     result = ""
