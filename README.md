@@ -71,6 +71,12 @@ copy config.sample.json config.json
 python main.py
 ```
 
+### 生成结果
+
+脚本运行完成后，会在当前目录下生成一个 `output.md` 文件，即为生成的文章。
+
+脚本运行完成后，会在当前目录下生成一个 `cover.jpg` 文件，即为视频的封面。
+
 ### 注意事项
 
 - 本代码仅供学习交流使用，请勿用于商业用途。
