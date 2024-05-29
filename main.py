@@ -1,0 +1,205 @@
+import json
+from openai import OpenAI
+import asyncio
+from openai import AsyncOpenAI
+from bilibili_api import sync, user, comment, video, Credential
+import requests
+from bilibili_api.login import (
+    login_with_password,
+    login_with_sms,
+    send_sms,
+    PhoneNumber,
+    Check,
+)
+from config import config
+from bilibili_api.user import get_self_info
+
+# 免责声明: 本代码仅供学习交流使用, 请勿用于商业用途, 请勿用于违法用途.
+
+agree = input(
+    "你是否承诺不将生成的文章用于商业用途, 也不将生成的文章用于违法用途? (y/n): "
+)
+if agree != "y":
+    exit(0)
+
+# 目标视频是否获得转载,改编授权?
+agree = input("你是否已经获得视频转载, 改编授权? (y/n): ")
+if agree != "y":
+    exit(0)
+
+print("config", config)
+bvid = config["bvid"]
+client = AsyncOpenAI(
+    api_key=config["openai"]["api_key"],
+    base_url=config["openai"]["openai_base_url"],
+)
+info = config["info"]
+print("正在登录。")
+# credential = login_with_password("18596013314", "Lzp00314!")
+
+credential = Credential(
+    sessdata=config["credential"]["sessdata"],
+    bili_jct=config["credential"]["bili_jct"],
+    buvid3=config["credential"]["buvid3"],
+    dedeuserid=config["credential"]["dedeuserid"],
+    ac_time_value=config["credential"]["ac_time_value"],
+)
+
+# 获取用户信息
+
+userInfo = sync(get_self_info(credential))
+
+print("登录成功。", userInfo)
+
+# print("sessdata", credential.sessdata)
+# print("bili_jct", credential.bili_jct)
+# print("buvid3", credential.buvid3)
+# print("dedeuserid", credential.dedeuserid)
+# print("ac_time_value", credential.ac_time_value)
+
+
+v = video.Video(bvid=bvid, credential=credential)
+
+
+async def answer(question: str) -> str:
+    messages = [
+        {
+            "role": "system",
+            "content": config["prompt"],
+        },
+        {
+            "role": "user",
+            "content": question,
+        },
+    ]
+    chat_completion = await client.chat.completions.create(
+        messages=messages,
+        model="deepseek-chat",
+        temperature=1,
+        max_tokens=4096,
+    )
+
+    result = ""
+    for message in chat_completion.choices:
+        result += message.message.content
+    return result
+
+
+async def generateArticle():
+    videoTitle = await getBliVideoTitle()
+    videoDescription = await getBliVideoDescription()
+    videoContent = await getBliTextContent()
+    videoTopComments = await getBliVideoTopComments()
+    coverUrl = await getBliVideoCover()
+    print("=====================================")
+    print("videoTitle", videoTitle)
+    print("=====================================")
+    print("videoDescription", videoDescription)
+    print("=====================================")
+    print("videoContent", videoContent)
+    print("=====================================")
+    print("videoTopComments", videoTopComments)
+    print("=====================================")
+    print("coverUrl", coverUrl)
+    print("=====================================")
+
+    # return
+    articleContent = await answer(
+        f"""
+以下是字幕内容, 字幕内容有些许错误, 请根据相关信息进行纠错:
+{videoContent}
+以下是相关信息, 相关信息是准确的, 请根据相关信息进行纠错, 补充:
+视频地址:
+https://www.bilibili.com/video/{bvid}
+视频标题:
+{videoTitle}
+视频简介:
+{videoDescription}
+置顶评论(内有作者提供的信息,请将信息嵌入到合适的位置):
+{videoTopComments}
+视频相关事实信息:
+{info}
+现在开始生成文章:
+"""
+    )
+    print("articleContent", articleContent)
+    articleContent += """
+"""
+    # 将articleContent写入output.md
+    with open("output.md", "w", encoding="utf-8") as f:
+        f.write(articleContent)
+
+    
+    # 将cover下载写入cover.jpg
+    print("coverUrl", coverUrl)
+    if coverUrl is None or coverUrl == "":
+        with open("cover.jpg", "wb") as f:
+            image = requests.get(coverUrl)
+            f.write(image.content)
+
+    pass
+
+
+async def getBliTextContent() -> str:
+    player_info = await v.get_player_info(cid=1)
+    print("player_info", player_info)
+    subtitles = await v.get_subtitle(cid=player_info["last_play_cid"])
+    # 发起请求获取字幕
+    if len(subtitles["subtitles"]) == 0:
+        return "无字幕"
+    subtitle_url = subtitles["subtitles"][0]["subtitle_url"]
+
+    # 获取字幕内容
+    subtitle = requests.get("https:" + subtitle_url)
+    subtitlesJson = subtitle.json()
+    subtitlesBody = subtitlesJson["body"]
+    subtitlesContent = ""
+    for subtitle in subtitlesBody:
+        subtitlesContent += subtitle["content"]
+    return subtitlesContent
+
+
+async def getBliVideoTitle() -> str:
+    info = await v.get_info()
+    return info["title"]
+
+
+async def getBliVideoDescription() -> str:
+    info = await v.get_info()
+    return info["desc"]
+
+
+async def getBliVideoCover() -> str:
+    info = await v.get_info()
+    return info["pic"]
+
+
+async def getBliVideoTopComments() -> str:
+    topComments = []
+    # 页码
+    page = 1
+    # 当前已获取数量
+    oid = v.get_aid()
+    # 获取评论
+    c = await comment.get_comments(
+        oid, comment.CommentResourceType.VIDEO, page, order=comment.OrderType.LIKE
+    )
+    topCommentsRaw = c.get("top_replies")
+
+    if topCommentsRaw is None:
+        return "无置顶评论"
+
+    for topCommentRaw in topCommentsRaw:
+        topComments.append(
+            {
+                "member": f'{ topCommentRaw.get("member").get("uname")}',
+                "content": topCommentRaw.get("content").get("message"),
+            }
+        )
+
+    return topComments.__str__()
+
+
+if __name__ == "__main__":
+    # 主入口
+    asyncio.run(generateArticle())

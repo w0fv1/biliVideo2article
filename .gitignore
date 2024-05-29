@@ -1,0 +1,7 @@
+venv/
+__pycache__/
+config.json
+cover.jpg
+cover.png
+output.md
+output.txt
