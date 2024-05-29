@@ -42,7 +42,10 @@ copy config.sample.json config.json
   "bvid": "视频的bvid",
   "openai": {
     "api_key": "你的OpenAI API密钥",
-    "openai_base_url": "OpenAI API的基础URL"
+    "openai_base_url": "OpenAI API的基础URL",
+    "model": "填写你的LLM MODEL",
+    "temperature": 1,
+    "max_tokens": 4096
   },
   "credential": {
     "sessdata": "请参考https://nemo2011.github.io/bilibili-api/#/get-credential获得sessdata",
