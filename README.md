@@ -98,6 +98,9 @@ python main.py
 
 本项目不会制作易用性UI, 以免被滥用, 请自行修改代码以适应自己的需求. (对于程序员来说, 这不是什么难事)
 
+闲聊可加QQ群:  [w0fv1.dev / 编程小屋](https://qm.qq.com/q/tqTsZ39nGM). 但有项目相关的反馈请发Issue.
+
+
 ## 许可证
 
 本项目使用 [Creative Commons Attribution-NonCommercial 4.0 International (CC BY-NC 4.0)](https://creativecommons.org/licenses/by-nc/4.0/deed.zh) 许可证。您可以自由地共享和修改本项目的内容，但仅限于非商业用途，且必须遵守许可证的条款。
