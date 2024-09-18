@@ -143,7 +143,9 @@ async def generateArticle():
     # return
     articleContent = await answer(
         f"""
-以下是字幕内容, 字幕内容有些许错误, 请根据相关信息进行纠错:
+下面一个良好的文章例子,请你参考其格式:
+{getSample()}
+以下是需要你转化为文字的视频字幕内容, 字幕内容有些许错误, 请根据相关信息进行纠错:
 {videoContent}
 以下是相关信息, 相关信息是准确的, 请根据相关信息进行纠错, 补充:
 视频地址:
@@ -235,6 +237,18 @@ async def getBliVideoTopComments() -> str:
 
     return topComments.__str__()
 
+def getSample() -> str:
+    try:
+        with open('sample.md', 'r', encoding='utf-8') as file:
+            content = file.read()
+        return content
+    except FileNotFoundError:
+        return "错误：未找到文件 'sample.md'。"
+    except PermissionError:
+        return "错误：没有权限读取文件 'sample.md'。"
+    except Exception as e:
+        return f"读取文件时发生未知错误：{e}"
+    
 
 if __name__ == "__main__":
     # 主入口
