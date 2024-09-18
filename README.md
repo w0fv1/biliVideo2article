@@ -48,11 +48,11 @@ copy config.sample.json config.json
     "max_tokens": 4096
   },
   "credential": {
-    "sessdata": "请参考https://nemo2011.github.io/bilibili-api/#/get-credential获得sessdata",
-    "bili_jct": "请参考https://nemo2011.github.io/bilibili-api/#/get-credential获得bili_jct",
-    "buvid3": "请参考https://nemo2011.github.io/bilibili-api/#/get-credential获得buvid3",
-    "dedeuserid": "请参考https://nemo2011.github.io/bilibili-api/#/get-credential获得dedeuserid",
-    "ac_time_value": "请参考https://nemo2011.github.io/bilibili-api/#/get-credential获得ac_time_value"
+    "sessdata": "请参考 https://nemo2011.github.io/bilibili-api/#/get-credential 获得sessdata",
+    "bili_jct": "请参考 https://nemo2011.github.io/bilibili-api/#/get-credential 获得bili_jct",
+    "buvid3": "请参考 https://nemo2011.github.io/bilibili-api/#/get-credential 获得buvid3",
+    "dedeuserid": "请参考 https://nemo2011.github.io/bilibili-api/#/get-credential 获得dedeuserid",
+    "ac_time_value": "请参考 https://nemo2011.github.io/bilibili-api/#/get-credential 获得ac_time_value"
   },
   "prompt": "生成文章时的提示信息",
   "info": "这是视频的额外事实信息, 当视频的信息不足以生成一篇文章的时候, 在这里补充事实信息, 如果不需要, 请删除留空."

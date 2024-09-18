@@ -53,7 +53,7 @@ client = AsyncOpenAI(
 )
 info = config["info"]
 print("正在登录。")
-# credential = login_with_password("18596013314", "Lzp00314!")
+# credential = login_with_password("your_phone_number", "your_password")
 
 credential = Credential(
     sessdata=config["credential"]["sessdata"],
@@ -63,8 +63,26 @@ credential = Credential(
     ac_time_value=config["credential"]["ac_time_value"],
 )
 
-# 获取用户信息
+# 检查 Credential 是否需要刷新并刷新
+print("正在检查 Credential 是否需要刷新...")
+need_refresh = sync(credential.check_refresh())
+if need_refresh:
+    print("Credential 需要刷新，正在刷新...")
+    sync(credential.refresh())
+    # 更新 config["credential"] 中的值
+    config["credential"]["sessdata"] = credential.sessdata
+    config["credential"]["bili_jct"] = credential.bili_jct
+    config["credential"]["buvid3"] = credential.buvid3
+    config["credential"]["dedeuserid"] = credential.dedeuserid
+    config["credential"]["ac_time_value"] = credential.ac_time_value
+    # 将更新后的配置保存回 config.json
+    with open("config.json", "w", encoding="utf-8") as f:
+        json.dump(config, f, indent=4, ensure_ascii=False)
+    print("Credential 已刷新并保存到 config.json")
+else:
+    print("Credential 无需刷新。")
 
+# 获取用户信息
 userInfo = sync(get_self_info(credential))
 
 print("登录成功。", userInfo)
@@ -150,7 +168,7 @@ https://www.bilibili.com/video/{bvid}
 
     # 将cover下载写入cover.jpg
     print("coverUrl", coverUrl)
-    if coverUrl is None or coverUrl == "":
+    if coverUrl is not None and coverUrl != "":
         with open("cover.jpg", "wb") as f:
             image = requests.get(coverUrl)
             f.write(image.content)

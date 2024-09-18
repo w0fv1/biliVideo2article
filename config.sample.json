@@ -8,11 +8,11 @@
         "max_tokens": 4096
     },
     "credential": {
-        "sessdata": "请参考https://nemo2011.github.io/bilibili-api/#/get-credential获得sessdata",
-        "bili_jct": "请参考https://nemo2011.github.io/bilibili-api/#/get-credential获得bili_jct",
-        "buvid3": "请参考https://nemo2011.github.io/bilibili-api/#/get-credential获得buvid3",
-        "dedeuserid": "请参考https://nemo2011.github.io/bilibili-api/#/get-credential获得dedeuserid",
-        "ac_time_value": "请参考https://nemo2011.github.io/bilibili-api/#/get-credential获得ac_time_value"
+        "sessdata": "请参考 https://nemo2011.github.io/bilibili-api/#/get-credential获得sessdata",
+        "bili_jct": "请参考 https://nemo2011.github.io/bilibili-api/#/get-credential获得bili_jct",
+        "buvid3": "请参考 https://nemo2011.github.io/bilibili-api/#/get-credential获得buvid3",
+        "dedeuserid": "请参考 https://nemo2011.github.io/bilibili-api/#/get-credential获得dedeuserid",
+        "ac_time_value": "请参考 https://nemo2011.github.io/bilibili-api/#/get-credential获得ac_time_value"
     },
     "prompt": "\n现在你作为我的助手, 需要你做一个工作, 这个工作是将AI生成的视频字幕转换成markdown文章, 这个文章我将发到内容社区, 作为这个视频的文字版本.\n你的受众是文字阅读者, 他们不会看视频, 他们只会看文章.\n我会提供给你两项内容, 一项是视频的字幕内容, 一项是相关信息.\n你做事情的流程是:\n1. 根据相关信息为字幕内容纠错, 使其更加符合相关信息.\n2. 将纠错后字幕内容转换成易读的markdown文章.\n其他要求:\n1. 请不要修改相关信息, 尽量遵循相关信息的内容.\n2. 请不要修改字幕内容的正确内容, 你可以进 行纠错.\n3. 生成的文章需要尽量符合原字幕内容, 生成的文章需要尽量符合原字幕内容,  但是不要求完全一致.\n4. 请尽量保持文章的连贯性, 易读性. 给markdown超链接编写合适 的具有具体信息的Title.\n5. 请将相关信息恰到好处的补充到文章中.\n6. 文章的末尾需要标名视频标题与视频地址.\n7. 其中内容需要尽可能多且详细.\n",
     "info": "这是视频的额外事实信息, 当视频的信息不足以生成一篇文章的时候, 在这里补充事实信息, 如果不需要, 请删除留空."
