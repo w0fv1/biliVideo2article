@@ -4,13 +4,6 @@ import asyncio
 from openai import AsyncOpenAI
 from bilibili_api import sync, user, comment, video, Credential
 import requests
-from bilibili_api.login import (
-    login_with_password,
-    login_with_sms,
-    send_sms,
-    PhoneNumber,
-    Check,
-)
 from config import config
 from bilibili_api.user import get_self_info
 
